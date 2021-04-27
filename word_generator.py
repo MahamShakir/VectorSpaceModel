@@ -13,8 +13,8 @@ with open('document-dataset/stopwords.txt', 'r') as s:
     words = words.split('\n')
     stop_words = [word for word in words if word]
 
-#initialise vsm
-vector_space_model = {}
+#create unique words ordered list
+unique_word_list = {}
 
 for doc_id in range(1,51):
     with open("document-dataset/documents/"+str(doc_id)+".txt" , 'r') as f:
@@ -35,10 +35,11 @@ for doc_id in range(1,51):
                 word = ""
             word = singularize(word)
             #filters all >=2 chars for words
-            
-            #
-            # MAKE TFIDFs HERE 
-            #
+            if(len(word) >= 3):
+                if(word in unique_word_list):
+                    unique_word_list[word].append((doc_id, position))
+                else:
+                    unique_word_list[word] = [(doc_id, position)]
 
-# with open('public/data.json' , 'w') as m:
-#     m.write(json.dumps(positional_index))
+with open('public/data.json' , 'w') as m:
+    m.write(json.dumps(unique_word_list))
