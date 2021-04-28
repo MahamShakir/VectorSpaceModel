@@ -14,14 +14,115 @@ var pluralize = require('pluralize')
 function App() {
   let [input, setInput] = useState("");
   let [result, setResult] = useState("NaN");
+  let [idfs, setIDFS] = useState([]);
+  let [doc_vectors, setDocVectors] = useState([])
+
+  const getData = () => {
+    fetch('vsm.json'
+    ,{
+      headers : { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+       }
+    }
+    )
+      .then(function(response){
+        return response.json();
+      })
+      .then(function(myJson) {
+        setDocVectors(myJson)
+      });
+  }
+
+  const getIDFS = () => {
+    fetch('idfs.json'
+    ,{
+      headers : { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+       }
+    }
+    )
+      .then(function(response){
+        return response.json();
+      })
+      .then(function(myJson) {
+        setIDFS(myJson)
+      });
+  }
 
   function handleInput(e){
     setInput(e.target.value);
   }
 
-  function handleClick(){
-    alert(input);
+  function get_magnitude(vector){
+    let i;
+    let magnitude = 0;
+    for(i = 0; i < vector.length; i++){
+      magnitude += vector[i]*vector[i];
+    }
+
+    magnitude = Math.sqrt(magnitude);
+    return magnitude;
   }
+
+  function get_vector(doc_id){
+    let vector = doc_vectors[doc_id];
+    var values = Object.keys(vector).map(function(key){
+      return vector[key];
+    });
+    return values;
+  }
+
+  function handleClick(){
+    let i, doc_id, word;
+    let query_vector = {};
+    /* lemmentize input similar to word list */
+    let query = input.toLowerCase().split(" ");
+    for(i in query){
+      query[i] = query[i].replace(/[.,'—’‘ªã©¯\/#!@?$%\^&\*;:(){}=\-_`~]/g,"");
+      query[i] = query[i].replace(/\s{2,}/g," ");
+      query[i] = pluralize.singular(query[i])
+    }
+
+    //remove empty spaces
+    query = query.filter(e => e != "")
+
+    for(word of query){
+      query_vector[word] = 0;
+    }
+    for(word of query){
+      query_vector[word] += 1;
+    }
+    let query_tfidf = {};
+    for(word of query){
+      query_tfidf[word] = query_vector[word] * idfs[word]
+    }
+
+    var values = Object.keys(query_tfidf).map(function(key){
+      return query_tfidf[key];
+    });
+    
+    let m_query = get_magnitude(values);
+    let m_doc = get_magnitude(get_vector(2));
+    let scores = {};
+    for(doc_id = 1; doc_id < 51; doc_id++){
+      let doc_list = doc_vectors[doc_id];
+      for(word in query_tfidf){
+        console.log(doc_list[word])
+      }
+    }
+
+
+    
+
+
+  }
+
+  useEffect(() => {
+    getData();
+    getIDFS();
+  }, [])
 
   return (
     <div>

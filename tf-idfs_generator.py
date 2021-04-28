@@ -33,12 +33,15 @@ for word in index.keys():
     if(idfs[word] != 0):
         idfs[word] = math.log10(50/idfs[word])
 
+with open('public/idfs.json' , 'w') as k:
+    k.write(json.dumps(idfs))
+
 #make the vector space model
 for doc_id in range(1,51):
-    vsm[doc_id] = []
+    vsm[doc_id] = {}
     for word in index.keys():
         value = tfs[doc_id][word] * idfs[word]
-        vsm[doc_id].append(value)
+        vsm[doc_id][word] = value
 
 with open('public/vsm.json' , 'w') as m:
     m.write(json.dumps(vsm))
