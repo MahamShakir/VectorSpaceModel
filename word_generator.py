@@ -34,6 +34,11 @@ for doc_id in range(1,51):
             if(word in stop_words):
                 word = ""
             word = singularize(word)
+            word = re.sub(r'ly$', r'', word)
+            word = re.sub(r'ed$', r'', word)
+            word = re.sub(r'ing$', r'', word)
+            word = re.sub(r'ness$', r'', word)
+            word = re.sub(r'nes$', r'', word)
             #filters all >=2 chars for words
             if(len(word) >= 3):
                 if(word in unique_word_list):
@@ -41,5 +46,7 @@ for doc_id in range(1,51):
                 else:
                     unique_word_list[word] = [(doc_id, position)]
 
+
+print(len(unique_word_list.keys()))
 with open('public/data.json' , 'w') as m:
     m.write(json.dumps(unique_word_list))

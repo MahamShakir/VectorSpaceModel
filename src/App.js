@@ -6,7 +6,7 @@ import FindInPage from '@material-ui/icons/FindInPage';
 import Search from '@material-ui/icons/Search'
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
+import CardContent from '@material-ui/core/CardContent'
 import 'fontsource-roboto';
 var pluralize = require('pluralize')
 
@@ -14,6 +14,7 @@ var pluralize = require('pluralize')
 function App() {
   let [input, setInput] = useState("");
   let [result, setResult] = useState("NaN");
+  let [stop_words, setStopWords] = useState([]);
   let [idfs, setIDFS] = useState([]);
   let [doc_vectors, setDocVectors] = useState([])
 
@@ -51,6 +52,23 @@ function App() {
       });
   }
 
+  const getStopWords = () => {
+    fetch('stopwords.json'
+    ,{
+      headers : { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+       }
+    }
+    )
+      .then(function(response){
+        return response.json();
+      })
+      .then(function(myJson) {
+        setStopWords(myJson)
+      });
+  }
+
   function handleInput(e){
     setInput(e.target.value);
   }
@@ -79,15 +97,20 @@ function App() {
     let query_vector = {};
     /* lemmentize input similar to word list */
     let query = input.toLowerCase().split(" ");
+    // remove stop words 
+    query = query.filter((word) => !stop_words["words"].includes(word));
     for(i in query){
       query[i] = query[i].replace(/[.,'—’‘ªã©¯\/#!@?$%\^&\*;:(){}=\-_`~]/g,"");
       query[i] = query[i].replace(/\s{2,}/g," ");
       query[i] = pluralize.singular(query[i])
+      query[i] = query[i].replace(/ly$/g,"");
+      query[i] = query[i].replace(/ed$/g,"");
+      query[i] = query[i].replace(/ness$/g,"");
     }
-
+    alert(query)
     //remove empty spaces
     query = query.filter(e => e != "")
-
+    
     for(word of query){
       query_vector[word] = 0;
     }
@@ -98,30 +121,37 @@ function App() {
     for(word of query){
       query_tfidf[word] = query_vector[word] * idfs[word]
     }
-
     var values = Object.keys(query_tfidf).map(function(key){
       return query_tfidf[key];
     });
     
     let m_query = get_magnitude(values);
-    let m_doc = get_magnitude(get_vector(2));
     let scores = {};
     for(doc_id = 1; doc_id < 51; doc_id++){
       let doc_list = doc_vectors[doc_id];
+      let m_doc = get_magnitude(get_vector(doc_id));
+      let dot_product = 0;
       for(word in query_tfidf){
-        console.log(doc_list[word])
+        console.log(word, query_tfidf[word]);
+        console.log( word, doc_list[word]);
+        dot_product += query_tfidf[word] * doc_list[word];
+      }
+      scores[doc_id] = dot_product / (m_query * m_doc);
+    }
+    let inter_result = [];
+    for(i = 1; i < 51; i++){
+      if(scores[i] >= 0.005){
+        inter_result.push(i);
       }
     }
-
-
-    
-
-
+    result = inter_result.join(" , ");
+    setResult(result);
   }
 
   useEffect(() => {
     getData();
     getIDFS();
+    getStopWords();
   }, [])
 
   return (
