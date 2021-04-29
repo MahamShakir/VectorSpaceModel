@@ -107,7 +107,6 @@ function App() {
       query[i] = query[i].replace(/ed$/g,"");
       query[i] = query[i].replace(/ness$/g,"");
     }
-    alert(query)
     //remove empty spaces
     query = query.filter(e => e != "")
     
@@ -132,15 +131,13 @@ function App() {
       let m_doc = get_magnitude(get_vector(doc_id));
       let dot_product = 0;
       for(word in query_tfidf){
-        console.log(word, query_tfidf[word]);
-        console.log( word, doc_list[word]);
         dot_product += query_tfidf[word] * doc_list[word];
       }
       scores[doc_id] = dot_product / (m_query * m_doc);
     }
     let inter_result = [];
     for(i = 1; i < 51; i++){
-      if(scores[i] >= 0.005){
+      if(scores[i] >= 0.001){
         inter_result.push(i);
       }
     }

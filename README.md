@@ -2,7 +2,7 @@
 
 ### Created by Maham Shakir
 
-Simple UI to enter queries and retrieve Document IDs with cosine similarity at a given threshold. 
+Simple UI to enter queries and retrieve Document IDs with cosine similarity at a given threshold (α = 0.005)
 
 - word_generator.py for unique vocabulary creation
 - tf-idfs_generator.py for calculating tf-idfs on dataset

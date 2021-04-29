@@ -29,9 +29,8 @@ for word in index.keys():
         if(index[word][i][0] != temp_doc):
             idfs[word] += 1
             temp_doc = index[word][i][0]
-
-    if(idfs[word] != 0):
-        idfs[word] = math.log10(50/idfs[word])
+    
+    idfs[word] = math.log10(50/(idfs[word]+1))
 
 with open('public/idfs.json' , 'w') as k:
     k.write(json.dumps(idfs))
