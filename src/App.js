@@ -141,8 +141,13 @@ function App() {
         inter_result.push(i);
       }
     }
-    result = inter_result.join(" , ");
-    setResult(result);
+
+    if(inter_result.length == 0) setResult("No Documents Available, Please Rephrase Query")
+    else{
+      result = inter_result.join(" , ");
+      setResult(result);
+    }  
+      
   }
 
   useEffect(() => {
