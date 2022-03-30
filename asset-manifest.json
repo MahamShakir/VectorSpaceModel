@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/VectorSpaceModel/static/css/main.6dea0f05.chunk.css",
-    "main.js": "/VectorSpaceModel/static/js/main.bcb44b90.chunk.js",
-    "main.js.map": "/VectorSpaceModel/static/js/main.bcb44b90.chunk.js.map",
+    "main.js": "/VectorSpaceModel/static/js/main.9939b2d8.chunk.js",
+    "main.js.map": "/VectorSpaceModel/static/js/main.9939b2d8.chunk.js.map",
     "runtime-main.js": "/VectorSpaceModel/static/js/runtime-main.c9b6a9be.js",
     "runtime-main.js.map": "/VectorSpaceModel/static/js/runtime-main.c9b6a9be.js.map",
     "static/css/2.1375f86b.chunk.css": "/VectorSpaceModel/static/css/2.1375f86b.chunk.css",
@@ -21,6 +21,6 @@
     "static/css/2.1375f86b.chunk.css",
     "static/js/2.ba5d1674.chunk.js",
     "static/css/main.6dea0f05.chunk.css",
-    "static/js/main.bcb44b90.chunk.js"
+    "static/js/main.9939b2d8.chunk.js"
   ]
 }
