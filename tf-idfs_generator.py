@@ -7,11 +7,11 @@ with open('public/data.json') as f:
 tfs = {}
 idfs = {}
 vsm = {}
-for i in range(1,51):
+for i in range(1,449):
     tfs[i] = {}
 
 #count term frequencies in each document
-for doc_id in range(1,51):
+for doc_id in range(1,449):
 
     for word in index.keys():
         tfs[doc_id][word] = 0
@@ -36,7 +36,7 @@ with open('public/idfs.json' , 'w') as k:
     k.write(json.dumps(idfs))
 
 #make the vector space model
-for doc_id in range(1,51):
+for doc_id in range(1,449):
     vsm[doc_id] = {}
     for word in index.keys():
         value = tfs[doc_id][word] * idfs[word]

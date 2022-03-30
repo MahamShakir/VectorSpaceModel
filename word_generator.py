@@ -16,8 +16,8 @@ with open('document-dataset/stopwords.txt', 'r') as s:
 #create unique words ordered list
 unique_word_list = {}
 
-for doc_id in range(1,51):
-    with open("document-dataset/documents/"+str(doc_id)+".txt" , 'r') as f:
+for doc_id in range(1,449):
+    with open("document-dataset/abstracts/"+str(doc_id)+".txt" , 'r', encoding="ISO-8859-1") as f:
         #read data file by file for index construction
         data = ""
         data = f.read()
@@ -31,6 +31,7 @@ for doc_id in range(1,51):
             word = re.sub(pattern_for_punc, "", word)
             word = re.sub(r'——|”|“', r'', word)
             word = re.sub(r'’|‘|ª|ã|©|¯', r'', word)
+            word = re.sub(r'\u0092|\u0093|\u0094|\u00f1|\u00a8|\u00d7|\u00ef|\u00e9', r'', word)
             if(word in stop_words):
                 word = ""
             word = singularize(word)
