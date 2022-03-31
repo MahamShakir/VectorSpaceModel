@@ -21,7 +21,7 @@ for doc_id in range(1,449):
         #read data file by file for index construction
         data = ""
         data = f.read()
-
+        data = re.sub(pattern_for_punc, " ", data)
         data = re.split(r'\s|-|—' ,data)
         data = [word for word in data if word]
 

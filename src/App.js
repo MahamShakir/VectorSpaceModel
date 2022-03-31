@@ -126,7 +126,7 @@ function App() {
     
     let m_query = get_magnitude(values);
     let scores = {};
-    for(doc_id = 1; doc_id < 51; doc_id++){
+    for(doc_id = 1; doc_id < 449; doc_id++){
       let doc_list = doc_vectors[doc_id];
       let m_doc = get_magnitude(get_vector(doc_id));
       let dot_product = 0;
@@ -136,7 +136,7 @@ function App() {
       scores[doc_id] = dot_product / (m_query * m_doc);
     }
     let inter_result = [];
-    for(i = 1; i < 51; i++){
+    for(i = 1; i < 449; i++){
       if(scores[i] >= 0.001){
         inter_result.push(i);
       }
